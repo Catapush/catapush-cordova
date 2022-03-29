@@ -1,0 +1,110 @@
+<?xml version='1.0' encoding='utf-8'?>
+<plugin
+ id="catapush-cordova-sdk"
+ version="0.0.1"
+ xmlns="http://apache.org/cordova/ns/plugins/1.0"
+ xmlns:android="http://schemas.android.com/apk/res/android">
+  <engines>
+    <engine name="cordova" version=">=3.0.0" />
+  </engines>
+
+  <js-module name="Catapush" src="www/Catapush.js">
+    <clobbers target="Catapush" />
+  </js-module>
+  <platform name="ios">
+    <config-file target="config.xml" parent="/*">
+    <feature name="CatapushSdk">
+    <param name="ios-package" value="CatapushSdk" />
+    </feature>
+    </config-file>
+    <source-file src="src/ios/Catapush.swift" />
+    <source-file src="src/ios/AppDelegate+Catapush.m" />
+		<source-file src="src/ios/AppDelegate+Catapush.h" />
+    <dependency id="cordova-plugin-add-swift-support" version="2.0.1"/>
+    <podspec>
+    <config>
+        <source url="https://cdn.cocoapods.org/"/>
+    </config>
+    <pods use-frameworks="true">
+        <pod name="catapush-ios-sdk-pod" spec="~> 2.1.16" />
+    </pods>
+    </podspec>
+  </platform>
+  <platform name="android">
+      <config-file target="config.xml" parent="/*">
+        <feature name="CatapushSdk">
+          <param name="android-package" value="com.catapush.cordova.sdk.CatapushSdk" />
+        </feature>
+      </config-file>
+      <preference name="CATAPUSH_APP_KEY" default="SET_YOUR_CATAPUSH_APP_KEY" />
+      <preference name="NOTIFICATION_CHANNEL_ID" default="com.catapush.cordova.sdk.channel" />
+      <preference name="NOTIFICATION_CHANNEL_NAME" default="Notification channel" />
+      <preference name="NOTIFICATION_TITLE" default=" " />
+      <preference name="NOTIFICATION_ICON_RES" default="ic_stat_notify" />
+      <preference name="NOTIFICATION_COLOR_HEX" default="#50BFF7" />
+      <config-file target="AndroidManifest.xml" parent="/*">
+        <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+      </config-file>
+      <config-file target="AndroidManifest.xml" parent="/*">
+        <uses-permission android:name="android.permission.INTERNET" />
+      </config-file>
+      <config-file target="AndroidManifest.xml" parent="/*">
+        <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+      </config-file>
+      <config-file target="AndroidManifest.xml" parent="/*">
+        <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+      </config-file>
+      <config-file target="AndroidManifest.xml" parent="/*">
+        <permission
+          android:name="${applicationId}.permission.CATAPUSH_MESSAGING"
+          android:protectionLevel="signature" />
+      </config-file>
+      <config-file target="AndroidManifest.xml" parent="application">
+        <meta-data
+            android:name="com.catapush.library.APP_KEY"
+            android:value="$CATAPUSH_APP_KEY" />
+      </config-file>
+      <config-file target="AndroidManifest.xml" parent="application">
+        <receiver
+            android:name="com.catapush.cordova.sdk.CatapushCordovaReceiver"
+            android:permission="${applicationId}.permission.CATAPUSH_MESSAGING"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.catapush.library.action.CONNECTING" />
+                <action android:name="com.catapush.library.action.CONNECTED" />
+                <action android:name="com.catapush.library.action.DISCONNECTED" />
+                <action android:name="com.catapush.library.action.MESSAGE_RECEIVED" />
+                <action android:name="com.catapush.library.action.MESSAGE_OPENED" />
+                <action android:name="com.catapush.library.action.MESSAGE_OPENED_CONFIRMED" />
+                <action android:name="com.catapush.library.action.MESSAGE_SENT" />
+                <action android:name="com.catapush.library.action.MESSAGE_SENT_CONFIRMED" />
+                <action android:name="com.catapush.library.action.INVALID_LIBRARY" />
+                <action android:name="com.catapush.library.action.NETWORK_ERROR" />
+                <action android:name="com.catapush.library.action.PUSH_SERVICE_ERROR"/>
+                <category android:name="${applicationId}"/>
+            </intent-filter>
+        </receiver>
+      </config-file>
+      <config-file target="res/values/strings.xml" parent="/*">
+        <string name="catapush_notification_channel_id" translatable="false">$NOTIFICATION_CHANNEL_ID</string>
+        <string name="catapush_notification_channel_name" translatable="false">$NOTIFICATION_CHANNEL_NAME</string>
+        <string name="catapush_notification_title" translatable="false">$NOTIFICATION_TITLE</string>
+        <string name="catapush_notification_icon_res" translatable="false">$NOTIFICATION_ICON_RES</string>
+        <string name="catapush_notification_color_hex" translatable="false">$NOTIFICATION_COLOR_HEX</string>
+      </config-file>
+      <source-file src="src/android/CatapushSdk.kt" target-dir="kotlin/com/catapush/cordova/sdk" />
+      <source-file src="src/android/CatapushApplication.kt" target-dir="kotlin/com/catapush/cordova/sdk" />
+      <source-file src="src/android/CatapushCordovaReceiver.kt" target-dir="kotlin/com/catapush/cordova/sdk" />
+      <source-file src="src/android/IMessagesDispatchDelegate.kt" target-dir="kotlin/com/catapush/cordova/sdk" />
+      <source-file src="src/android/IStatusDispatchDelegate.kt" target-dir="kotlin/com/catapush/cordova/sdk" />
+      <resource-file src="src/android/res/drawable-mdpi/ic_stat_notify.png" target="res/drawable-mdpi/ic_stat_notify.png" />
+      <resource-file src="src/android/res/drawable-hdpi/ic_stat_notify.png" target="res/drawable-hdpi/ic_stat_notify.png" />
+      <resource-file src="src/android/res/drawable-xhdpi/ic_stat_notify.png" target="res/drawable-xhdpi/ic_stat_notify.png" />
+      <resource-file src="src/android/res/drawable-xxhdpi/ic_stat_notify.png" target="res/drawable-xxhdpi/ic_stat_notify.png" />
+      <resource-file src="src/android/res/drawable-xxxhdpi/ic_stat_notify.png" target="res/drawable-xxxhdpi/ic_stat_notify.png" />
+      <framework custom="true" src="src/android/catapush-sdk.gradle" type="gradleReference" />
+      <hook type="after_platform_add" src="./scripts/android/editManifest.js" />
+      <hook type="after_plugin_install" src="./scripts/android/editManifest.js" />
+      <hook type="before_build" src="./scripts/android/editManifest.js" />
+  </platform>
+</plugin>

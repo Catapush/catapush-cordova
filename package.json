@@ -1,0 +1,28 @@
+{
+  "name": "catapush-cordova",
+  "version": "1.0.0",
+  "description": "Catapush plugin for Cordova",
+  "types": "./types/index.d.ts",
+  "cordova": {
+    "id": "catapush-cordova",
+    "platforms": [
+      "ios",
+      "android"
+    ]
+  },
+  "keywords": [
+    "catapush",
+    "push",
+    "notifications",
+    "apns",
+    "gcm",
+    "ecosystem:cordova",
+    "cordova"
+  ],
+  "author": "Catapush",
+  "license": "Apache 2.0",
+  "dependencies": {
+    "cordova-common": "^4.0.2",
+    "q": "^1.5.1"
+  }
+}

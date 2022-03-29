@@ -1,0 +1,23 @@
+android {
+    defaultConfig {
+        multiDexEnabled true
+    }
+    sourceSets {
+        main.java {
+            srcDirs += 'src/main/kotlin'
+        }
+    }
+}
+
+repositories {
+    google()
+    mavenCentral()
+    maven { url "https://www.jitpack.io" }
+}
+
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.5.30"
+    implementation 'androidx.multidex:multidex:2.0.1'
+    api "com.catapush.catapush-android-sdk:core:11.1.4"
+    api "com.catapush.catapush-android-sdk:gms:11.1.4"
+}
