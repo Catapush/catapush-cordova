@@ -49,41 +49,12 @@
         <uses-permission android:name="android.permission.INTERNET" />
       </config-file>
       <config-file target="AndroidManifest.xml" parent="/*">
-        <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-      </config-file>
-      <config-file target="AndroidManifest.xml" parent="/*">
         <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-      </config-file>
-      <config-file target="AndroidManifest.xml" parent="/*">
-        <permission
-          android:name="${applicationId}.permission.CATAPUSH_MESSAGING"
-          android:protectionLevel="signature" />
       </config-file>
       <config-file target="AndroidManifest.xml" parent="application">
         <meta-data
             android:name="com.catapush.library.APP_KEY"
             android:value="$CATAPUSH_APP_KEY" />
-      </config-file>
-      <config-file target="AndroidManifest.xml" parent="application">
-        <receiver
-            android:name="com.catapush.cordova.sdk.CatapushCordovaReceiver"
-            android:permission="${applicationId}.permission.CATAPUSH_MESSAGING"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.catapush.library.action.CONNECTING" />
-                <action android:name="com.catapush.library.action.CONNECTED" />
-                <action android:name="com.catapush.library.action.DISCONNECTED" />
-                <action android:name="com.catapush.library.action.MESSAGE_RECEIVED" />
-                <action android:name="com.catapush.library.action.MESSAGE_OPENED" />
-                <action android:name="com.catapush.library.action.MESSAGE_OPENED_CONFIRMED" />
-                <action android:name="com.catapush.library.action.MESSAGE_SENT" />
-                <action android:name="com.catapush.library.action.MESSAGE_SENT_CONFIRMED" />
-                <action android:name="com.catapush.library.action.INVALID_LIBRARY" />
-                <action android:name="com.catapush.library.action.NETWORK_ERROR" />
-                <action android:name="com.catapush.library.action.PUSH_SERVICE_ERROR"/>
-                <category android:name="${applicationId}"/>
-            </intent-filter>
-        </receiver>
       </config-file>
       <config-file target="res/values/strings.xml" parent="/*">
         <string name="catapush_notification_channel_id" translatable="false">$NOTIFICATION_CHANNEL_ID</string>
@@ -94,7 +65,7 @@
       </config-file>
       <source-file src="src/android/CatapushSdk.kt" target-dir="kotlin/com/catapush/cordova/sdk" />
       <source-file src="src/android/CatapushApplication.kt" target-dir="kotlin/com/catapush/cordova/sdk" />
-      <source-file src="src/android/CatapushCordovaReceiver.kt" target-dir="kotlin/com/catapush/cordova/sdk" />
+      <source-file src="src/android/CatapushCordovaEventDelegate.kt" target-dir="kotlin/com/catapush/cordova/sdk" />
       <source-file src="src/android/IMessagesDispatchDelegate.kt" target-dir="kotlin/com/catapush/cordova/sdk" />
       <source-file src="src/android/IStatusDispatchDelegate.kt" target-dir="kotlin/com/catapush/cordova/sdk" />
       <resource-file src="src/android/res/drawable-mdpi/ic_stat_notify.png" target="res/drawable-mdpi/ic_stat_notify.png" />

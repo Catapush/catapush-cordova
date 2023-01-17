@@ -172,7 +172,7 @@ You should also add this information in the App plist and the Extension plist (`
 
 
 ### [Android] Enable Kotlin and AndroidX
-In your app `config.xml` file add the necessary preferences to enable Kotlin and AndroidX for Android builds:
+In your app `config.xml` file add the necessary preferences to enable Kotlin and AndroidX and set target SDK 31 for the Android builds:
 ```xml
 <widget id="com.catapush.cordova.sdk.example" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
   <name>example</name>
@@ -181,6 +181,11 @@ In your app `config.xml` file add the necessary preferences to enable Kotlin and
   <preference name="GradlePluginKotlinCodeStyle" value="official" />
   <preference name="GradlePluginKotlinVersion" value="1.5.31" />
   <preference name="AndroidXEnabled" value="true" />
+  ...
+  <platform name="android">
+    <preference name="android-targetSdkVersion" value="31" />
+    ...
+  </platform>
   ...
 </widget>
 ```
