@@ -3,7 +3,22 @@
 #import "Catapush.h"
 
 @implementation AppDelegate (Catapush)
++ (void)load {
+    Method original, swizzled;
+    original = class_getInstanceMethod(self, @selector(init));
+    swizzled = class_getInstanceMethod(self, @selector(swizzled_init));
+    method_exchangeImplementations(original, swizzled);
+}
 
+- (AppDelegate *)swizzled_init {
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(launchHandler:) name:@"UIApplicationDidFinishLaunchingNotification" object:nil];
+    return [self swizzled_init];
+}
+
+- (void)launchHandler:(NSNotification *)notification {
+    [Catapush registerUserNotification:self];
+}
+    
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
     [Catapush registerForRemoteNotificationsWithDeviceToken:deviceToken];
 }
@@ -13,7 +28,6 @@
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
-    
     NSError *error;
     [Catapush applicationWillEnterForeground:application withError:&error];
     if (error != nil) {

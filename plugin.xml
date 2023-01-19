@@ -26,7 +26,7 @@
         <source url="https://cdn.cocoapods.org/"/>
     </config>
     <pods use-frameworks="true">
-        <pod name="catapush-ios-sdk-pod" spec="~> 2.1.16" />
+        <pod name="catapush-ios-sdk-pod" spec="~> 2.2.2" />
     </pods>
     </podspec>
   </platform>

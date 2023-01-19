@@ -15,7 +15,6 @@ import CoreServices
             return
         }
         Catapush.setAppKey(appKey)
-        Catapush.registerUserNotification(UIApplication.shared.delegate as? UIResponder)
         let result = CDVPluginResult(status: CDVCommandStatus_OK)
         self.commandDelegate.send(result, callbackId: command.callbackId)
         catapushDelegate = CatapushDelegateClass(channel: self)
@@ -147,7 +146,7 @@ import CoreServices
                 if let replyTo = replyTo {
                     message = Catapush.sendMessage(withText: text, replyTo: replyTo)
                 }else{
-                    message = Catapush.sendMessage(withText: text)!
+                    message = Catapush.sendMessage(withText: text)
                 }
             }
         }
@@ -166,7 +165,8 @@ import CoreServices
         }
         
         let predicate = NSPredicate(format: "messageId = %@", id)
-        if let matches = Catapush.messages(with: predicate), matches.count > 0 {
+        let matches = Catapush.messages(with: predicate)
+        if matches.count > 0 {
             let messageIP = matches.first! as! MessageIP
             if messageIP.hasMedia() {
                 if messageIP.mm != nil {
@@ -176,14 +176,14 @@ import CoreServices
                               return
                           }
                     let tempDirectoryURL = NSURL.fileURL(withPath: NSTemporaryDirectory(), isDirectory: true)
-                    let filePath = tempDirectoryURL.appendingPathComponent("\(messageIP.messageId!).\(ext.takeRetainedValue())")
+                    let filePath = tempDirectoryURL.appendingPathComponent("\(messageIP.messageId).\(ext.takeRetainedValue())")
                     let fileManager = FileManager.default
                     if fileManager.fileExists(atPath: filePath.path) {
-                        self.commandDelegate.send(CDVPluginResult(status: CDVCommandStatus_OK, messageAs: ["url": filePath.path, "mimeType": messageIP.mmType]), callbackId: command.callbackId)
+                        self.commandDelegate.send(CDVPluginResult(status: CDVCommandStatus_OK, messageAs: ["url": filePath.path, "mimeType": mime]), callbackId: command.callbackId)
                     }
                     do {
-                        try messageIP.mm.write(to: filePath)
-                        self.commandDelegate.send(CDVPluginResult(status: CDVCommandStatus_OK, messageAs: ["url": filePath.path, "mimeType": messageIP.mmType]), callbackId: command.callbackId)
+                        try messageIP.mm!.write(to: filePath)
+                        self.commandDelegate.send(CDVPluginResult(status: CDVCommandStatus_OK, messageAs: ["url": filePath.path, "mimeType": mime]), callbackId: command.callbackId)
                     } catch {
                         self.commandDelegate.send(CDVPluginResult(status: CDVCommandStatus_ERROR, messageAs: ["error": error.localizedDescription]), callbackId: command.callbackId)
                     }
@@ -193,7 +193,8 @@ import CoreServices
                             self.commandDelegate.send(CDVPluginResult(status: CDVCommandStatus_ERROR, messageAs: ["error": error?.localizedDescription ?? ""]), callbackId: command.callbackId)
                         }else{
                             let predicate = NSPredicate(format: "messageId = %@", id)
-                            if let matches = Catapush.messages(with: predicate), matches.count > 0 {
+                            let matches = Catapush.messages(with: predicate)
+                            if matches.count > 0 {
                                 let messageIP = matches.first! as! MessageIP
                                 if messageIP.hasMedia() {
                                     if messageIP.mm != nil {
@@ -203,14 +204,14 @@ import CoreServices
                                                   return
                                               }
                                         let tempDirectoryURL = NSURL.fileURL(withPath: NSTemporaryDirectory(), isDirectory: true)
-                                        let filePath = tempDirectoryURL.appendingPathComponent("\(messageIP.messageId!).\(ext.takeRetainedValue())")
+                                        let filePath = tempDirectoryURL.appendingPathComponent("\(messageIP.messageId).\(ext.takeRetainedValue())")
                                         let fileManager = FileManager.default
                                         if fileManager.fileExists(atPath: filePath.path) {
                                             self.commandDelegate.send(CDVPluginResult(status: CDVCommandStatus_OK, messageAs: ["url": filePath.path]), callbackId: command.callbackId)
                                         }
                                         do {
-                                            try messageIP.mm.write(to: filePath)
-                                            self.commandDelegate.send(CDVPluginResult(status: CDVCommandStatus_OK, messageAs: ["url": filePath.path, "mimeType": messageIP.mmType]), callbackId: command.callbackId)
+                                            try messageIP.mm!.write(to: filePath)
+                                            self.commandDelegate.send(CDVPluginResult(status: CDVCommandStatus_OK, messageAs: ["url": filePath.path, "mimeType": mime]), callbackId: command.callbackId)
                                         } catch {
                                             self.commandDelegate.send(CDVPluginResult(status: CDVCommandStatus_ERROR, messageAs: ["error": error.localizedDescription]), callbackId: command.callbackId)
                                         }
