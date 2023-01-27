@@ -1,26 +1,21 @@
 package com.catapush.cordova.sdk
 
-import android.annotation.SuppressLint
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.app.PendingIntent
-import android.content.Context
-import android.content.Intent
 import android.graphics.Color
-import android.net.Uri
 import android.os.Build
 import androidx.multidex.MultiDexApplication
+import com.catapush.cordova.sdk.example.MainActivity
 import com.catapush.library.Catapush
 import com.catapush.library.gms.CatapushGms
 import com.catapush.library.interfaces.Callback
-import com.catapush.library.interfaces.IIntentProvider
-import com.catapush.library.messages.CatapushMessage
+import com.catapush.library.interfaces.ICatapushInitializer
 import com.catapush.library.notifications.NotificationTemplate
 import org.apache.cordova.LOG
 import java.util.*
 
 
-class CatapushApplication : MultiDexApplication() {
+class CatapushApplication : MultiDexApplication(), ICatapushInitializer {
 
   companion object {
     private lateinit var CHANNEL_ID: String
@@ -32,7 +27,10 @@ class CatapushApplication : MultiDexApplication() {
 
   override fun onCreate() {
     super.onCreate()
+    initCatapush()
+  }
 
+  override fun initCatapush() {
     readCordovaConfig()
 
     val notificationTemplate = NotificationTemplate.Builder(CHANNEL_ID)
@@ -75,38 +73,12 @@ class CatapushApplication : MultiDexApplication() {
     }
 
     Catapush.getInstance()
-      .setNotificationIntent(object : IIntentProvider {
-        @SuppressLint("UnspecifiedImmutableFlag")
-        override fun getIntentForMessage(
-          message: CatapushMessage,
-          context: Context
-        ): PendingIntent {
-          val pm = context.packageManager
-          val intent = pm.getLaunchIntentForPackage(context.packageName)!!
-          intent.data = Uri.parse("catapush://messages/" + message.id())
-          intent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
-          intent.putExtra("message", message)
-          val requestCode = message.id().hashCode()
-          return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            PendingIntent.getActivity(
-              context,
-              requestCode,
-              intent,
-              PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_ONE_SHOT
-            )
-          } else {
-            PendingIntent.getActivity(
-              context,
-              requestCode,
-              intent,
-              PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_ONE_SHOT
-            )
-          }
-        }
-      })
-      .init(this,
+      .init(
+        this,
+        this,
         CatapushCordovaEventDelegate,
         Collections.singletonList(CatapushGms),
+        CatapushCordovaIntentProvider(MainActivity::class.java),
         notificationTemplate,
         null,
         object : Callback<Boolean?> {

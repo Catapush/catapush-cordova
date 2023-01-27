@@ -17,6 +17,8 @@ class Catapush {
                   Catapush.messageDelegate.catapushMessageReceived(result.message)
                } else if (result.eventName === 'Catapush#catapushMessageSent') {
                   Catapush.messageDelegate.catapushMessageSent(result.message)
+               } else if (result.eventName === 'Catapush#catapushNotificationTapped') {
+                  Catapush.messageDelegate.catapushNotificationTapped(result.message)
                }
             },
             (e) => console.error(e),

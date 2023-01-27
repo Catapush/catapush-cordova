@@ -53,6 +53,10 @@ object CatapushCordovaEventDelegate: ICatapushEventDelegate {
     messagesDispatcher?.dispatchMessageReceived(message)
   }
 
+  override fun onMessageReceivedConfirmed(message: CatapushMessage) {
+    // TODO
+  }
+
   override fun onRegistrationFailed(error: CatapushAuthenticationError) {
     CatapushAuthenticationError::class.java.declaredFields.firstOrNull {
       Modifier.isStatic(it.modifiers)

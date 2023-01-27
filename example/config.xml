@@ -13,7 +13,7 @@
     <allow-intent href="geo:*" />
     <preference name="GradlePluginKotlinEnabled" value="true" />
     <preference name="GradlePluginKotlinCodeStyle" value="official" />
-    <preference name="GradlePluginKotlinVersion" value="1.5.31" />
+    <preference name="GradlePluginKotlinVersion" value="1.7.21" />
     <preference name="AndroidXEnabled" value="true" />
     <preference name="ScrollEnabled" value="false" />
     <preference name="BackupWebStorage" value="none" />
@@ -24,6 +24,7 @@
     <preference name="SplashScreenDelay" value="3000" />
     <platform name="android">
         <preference name="android-targetSdkVersion" value="31" />
+        <preference name="android-compileSdkVersion" value="33" />
         <resource-file src="google-services.json" target="app/google-services.json" />
         <preference name="Scheme" value="http" />
         <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application" xmlns:android="http://schemas.android.com/apk/res/android">
