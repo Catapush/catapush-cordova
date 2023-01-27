@@ -209,6 +209,30 @@ Copy your `google-services.json` file in the root folder of your app project and
 This plugin include a script that overrides your app class.
 This class extends `MultidexApplication` and inits the native Catapush Android SDK for you, following the plugin preferences you set in your `package.json` file.
 
+### [Android] MainActivity class customization
+
+Your `MainActivity` implementation must forward the received `Intent`s to make the `catapushNotificationTapped` callback work:
+
+```java
+public class MainActivity extends CordovaActivity
+{
+    @Override
+    public void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+        CatapushCordovaIntentProvider.Companion.handleIntent(getIntent());
+        ...
+    }
+
+  @Override
+  protected void onNewIntent(Intent intent) {
+    super.onNewIntent(intent);
+    CatapushCordovaIntentProvider.Companion.handleIntent(intent);
+  }
+
+}
+```
+
 ### [Android] Configure a push services provider
 
 If you want to be able to receive the messages while your app is not running in the foreground you have to integrate one of the supported services providers: Google Mobile Services or Huawei Mobile Services.
