@@ -33,7 +33,7 @@ export class AppComponent {
         (message: string) => {
           console.log('Catapush init failed: ' + message);
         },
-        '3ef0930b34f558c963f3a9a7c029ee48'
+        'SET_YOUR_CATAPUSH_APP_KEY'
       );
 
       Catapush.setUser(
@@ -54,8 +54,8 @@ export class AppComponent {
         (message: string) => {
           console.log('Catapush setUser failed: ' + message);
         },
-        'ios',
-        'ios'
+        'SET_YOUR_CATAPUSH_USER_IDENTIFIER',
+        'SET_YOUR_CATAPUSH_USER_PASSWORD'
       );
 
     });
