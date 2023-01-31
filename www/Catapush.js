@@ -17,6 +17,8 @@ class Catapush {
                   Catapush.messageDelegate.catapushMessageReceived(result.message)
                } else if (result.eventName === 'Catapush#catapushMessageSent') {
                   Catapush.messageDelegate.catapushMessageSent(result.message)
+               } else if (result.eventName === 'Catapush#catapushNotificationTapped') {
+                  Catapush.messageDelegate.catapushNotificationTapped(result.message)
                }
             },
             (e) => console.error(e),
@@ -43,7 +45,7 @@ class Catapush {
                if (result.eventName === 'Catapush#catapushStateChanged') {
                   Catapush.stateDelegate.catapushStateChanged(result.status.toUpperCase())
                } else if (result.eventName === 'Catapush#catapushHandleError') {
-                  Catapush.stateDelegate.catapushHandleError(new CatapushError(result.event, result.code))
+                  Catapush.stateDelegate.catapushHandleError({ event: result.event, code: result.code })
                }
             },
             (e) => console.error(e),

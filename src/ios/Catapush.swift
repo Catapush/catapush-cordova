@@ -15,6 +15,7 @@ import CoreServices
             return
         }
         Catapush.setAppKey(appKey)
+        UNUserNotificationCenter.current().delegate = self
         let result = CDVPluginResult(status: CDVCommandStatus_OK)
         self.commandDelegate.send(result, callbackId: command.callbackId)
         catapushDelegate = CatapushDelegateClass(channel: self)
@@ -610,4 +611,32 @@ protocol MessageDispatchSendResult {
 
 protocol StateDispatchSendResult {
     func stateDispatchSendResult(result: CDVPluginResult)
+}
+
+extension CatapushSdk: UNUserNotificationCenterDelegate {
+    public func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+        let ud = UserDefaults.init(suiteName: (Bundle.main.object(forInfoDictionaryKey: "Catapush") as! (Dictionary<String,String>))["AppGroup"])
+        let pendingMessages : Dictionary<String, String>? = ud!.object(forKey: "pendingMessages") as? Dictionary<String, String>;
+        if (pendingMessages != nil && pendingMessages![response.notification.request.identifier] != nil) {
+            let id: String = String(pendingMessages![response.notification.request.identifier]!.split(separator: "_").first ?? "")
+            let predicate = NSPredicate(format: "messageId == %@", id)
+            let matches = Catapush.messages(with: predicate)
+            if matches.count > 0, let messageIP = matches.first as? MessageIP {
+                let result = [
+                    "eventName": "Catapush#catapushNotificationTapped",
+                    "message": CatapushSdk.formatMessageID(message: messageIP)
+                ] as [String : Any]
+                messageDispatchSendResult(result: CDVPluginResult(status: CDVCommandStatus_OK, messageAs: result))
+                var newPendingMessages: Dictionary<String, String>?
+                if (pendingMessages == nil) {
+                    newPendingMessages = Dictionary()
+                }else{
+                    newPendingMessages = pendingMessages!
+                }
+                newPendingMessages![response.notification.request.identifier] = nil;
+                ud!.setValue(newPendingMessages, forKey: "pendingMessages")
+            }
+        }
+        completionHandler();
+    }
 }

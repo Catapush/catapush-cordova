@@ -66,6 +66,7 @@
       <source-file src="src/android/CatapushSdk.kt" target-dir="kotlin/com/catapush/cordova/sdk" />
       <source-file src="src/android/CatapushApplication.kt" target-dir="kotlin/com/catapush/cordova/sdk" />
       <source-file src="src/android/CatapushCordovaEventDelegate.kt" target-dir="kotlin/com/catapush/cordova/sdk" />
+      <source-file src="src/android/CatapushCordovaIntentProvider.kt" target-dir="kotlin/com/catapush/cordova/sdk" />
       <source-file src="src/android/IMessagesDispatchDelegate.kt" target-dir="kotlin/com/catapush/cordova/sdk" />
       <source-file src="src/android/IStatusDispatchDelegate.kt" target-dir="kotlin/com/catapush/cordova/sdk" />
       <resource-file src="src/android/res/drawable-mdpi/ic_stat_notify.png" target="res/drawable-mdpi/ic_stat_notify.png" />

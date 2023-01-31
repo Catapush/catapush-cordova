@@ -15,12 +15,33 @@ import org.json.JSONArray
 import org.json.JSONObject
 import java.io.File
 import java.io.FileOutputStream
+import java.lang.ref.WeakReference
 
 
 class CatapushSdk : CordovaPlugin(), IMessagesDispatchDelegate, IStatusDispatchDelegate {
 
   private var messageCallbackContext: CallbackContext? = null
   private var stateCallbackContext: CallbackContext? = null
+
+  companion object {
+    private val tappedMessagesQueue = ArrayList<CatapushMessage>()
+    private var instanceRef: WeakReference<CatapushSdk>? = null
+      set(value) {
+        field = value
+        value?.get()?.tryDispatchQueuedEvents()
+      }
+
+    fun handleNotificationTapped(message: CatapushMessage) {
+      val instance = instanceRef?.get()
+      if (instance?.isChannelReady() == true) {
+        instance.dispatchNotificationTapped(message)
+      } else {
+        tappedMessagesQueue.add(message)
+      }
+    }
+  }
+
+  private var inited = false
 
   init {
     try {
@@ -30,6 +51,7 @@ class CatapushSdk : CordovaPlugin(), IMessagesDispatchDelegate, IStatusDispatchD
     } catch (e: Exception) {
       Log.e("CatapushPlugin", "Can't initialize plugin instance", e)
     }
+    instanceRef = WeakReference(this)
   }
 
   override fun execute(
@@ -135,6 +157,12 @@ class CatapushSdk : CordovaPlugin(), IMessagesDispatchDelegate, IStatusDispatchD
     sendMessageEvent("Catapush#catapushMessageSent", params)
   }
 
+  override fun dispatchNotificationTapped(message: CatapushMessage) {
+    val params = JSONObject()
+    params.put("message", message.toMap())
+    sendMessageEvent("Catapush#catapushNotificationTapped", params)
+  }
+
   override fun dispatchConnectionStatus(status: String) {
     val params = JSONObject()
     params.put("status", status)
@@ -154,7 +182,9 @@ class CatapushSdk : CordovaPlugin(), IMessagesDispatchDelegate, IStatusDispatchD
     CatapushCordovaEventDelegate.setStatusDispatcher(this)
     CatapushCordovaEventDelegate.setContext(cordova.context)
 
-    if ((Catapush.getInstance() as Catapush).isInitialized.blockingFirst(false)) {
+    inited = (Catapush.getInstance() as Catapush).waitInitialization()
+    if (inited) {
+      tryDispatchQueuedEvents()
       val pluginResult = PluginResult(PluginResult.Status.OK, true)
       pluginResult.keepCallback = true
       callbackContext.sendPluginResult(pluginResult)
@@ -353,6 +383,17 @@ class CatapushSdk : CordovaPlugin(), IMessagesDispatchDelegate, IStatusDispatchD
     stateCallbackContext?.sendPluginResult(pluginResult)
   }
 
+  private fun isChannelReady() : Boolean {
+    return inited && instanceRef?.get() != null
+  }
+
+  private fun tryDispatchQueuedEvents() {
+    if (isChannelReady() && tappedMessagesQueue.isNotEmpty()) {
+      tappedMessagesQueue.forEach { dispatchNotificationTapped(it) }
+      tappedMessagesQueue.clear()
+    }
+  }
+
   private fun List<CatapushMessage>.toArray() : JSONArray {
     val array = JSONArray()
     forEach { array.put(it.toMap()) }
@@ -370,7 +411,7 @@ class CatapushSdk : CordovaPlugin(), IMessagesDispatchDelegate, IStatusDispatchD
     obj.put("optionalData", this.data()?.run {
       val data = JSONObject()
       forEach { (key, value) -> data.put(key, value) }
-      return data
+      return@run data
     })
     obj.put("replyToId", this.originalMessageId())
     obj.put("state", this.state())

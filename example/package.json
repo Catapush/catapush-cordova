@@ -22,6 +22,7 @@
     "@ionic-native/core": "^5.36.0",
     "@ionic-native/file-chooser": "^5.36.0",
     "@ionic/angular": "^6.0.0",
+    "cordova": "^11.1.0",
     "cordova-ios": "6.2.0",
     "rxjs": "~6.6.0",
     "tslib": "^2.2.0",
@@ -45,7 +46,7 @@
     "@typescript-eslint/parser": "5.3.0",
     "catapush": "file:..",
     "catapush-cordova": "file:..",
-    "cordova-android": "^10.1.2",
+    "cordova-android": "^11.0.0",
     "cordova-plugin-add-swift-support": "^2.0.1",
     "cordova-plugin-device": "2.0.2",
     "cordova-plugin-filechooser": "^1.2.0",
@@ -67,7 +68,8 @@
     "karma-jasmine-html-reporter": "^1.5.0",
     "protractor": "~7.0.0",
     "ts-node": "~8.3.0",
-    "typescript": "~4.4.4"
+    "typescript": "~4.4.4",
+    "undefined": "^0.1.0"
   },
   "description": "An Ionic project",
   "cordova": {
@@ -78,19 +80,11 @@
       "cordova-plugin-ionic-webview": {},
       "cordova-plugin-ionic-keyboard": {},
       "cordova-plugin-filechooser": {},
-      "catapush-cordova": {
-        "CATAPUSH_APP_KEY": "SET_YOUR_CATAPUSH_APP_KEY",
-        "NOTIFICATION_CHANNEL_ID": "com.catapush.cordova.sdk.channel",
-        "NOTIFICATION_CHANNEL_NAME": "Notification channel",
-        "NOTIFICATION_TITLE": "",
-        "NOTIFICATION_ICON_RES": "ic_stat_notify",
-        "NOTIFICATION_COLOR_HEX": "#50BFF7"
-      },
       "catapush-cordova-sdk": {
         "CATAPUSH_APP_KEY": "SET_YOUR_CATAPUSH_APP_KEY",
         "NOTIFICATION_CHANNEL_ID": "com.catapush.cordova.sdk.channel",
         "NOTIFICATION_CHANNEL_NAME": "Notification channel",
-        "NOTIFICATION_TITLE": "",
+        "NOTIFICATION_TITLE": " ",
         "NOTIFICATION_ICON_RES": "ic_stat_notify",
         "NOTIFICATION_COLOR_HEX": "#50BFF7"
       }
