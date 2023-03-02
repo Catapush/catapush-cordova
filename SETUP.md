@@ -316,6 +316,18 @@ To send read receipt:
 await Catapush.sendMessageReadNotificationWithId("id")
 ```
 
+To retrieve all received messages:
+```js
+Catapush.allMessages(
+  (messages: CatapushMessage[]) => {
+    // success
+  },
+  (message: string) => {
+    // error
+  }
+);
+```
+
 
 ### Example project
 The demo project is  in the `/example` folder of this repository.
