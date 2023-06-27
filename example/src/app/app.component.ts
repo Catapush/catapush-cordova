@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { Platform } from '@ionic/angular';
 import { Catapush } from 'plugins/catapush-cordova-sdk/types';
+import { AndroidPermissions } from '@awesome-cordova-plugins/android-permissions/ngx';
 
 declare var Catapush: Catapush;
 
@@ -12,9 +13,21 @@ declare var Catapush: Catapush;
 })
 export class AppComponent {
 
-  constructor(public router: Router, public platform: Platform) {
+  constructor(public router: Router,
+    public platform: Platform,
+    private androidPermissions: AndroidPermissions) {
+
     this.platform.ready().then((readySource) => {
       console.log('Platform ready from', readySource);
+
+      this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.POST_NOTIFICATIONS).then(
+        result => {
+          console.log('Has post notifications permission?', result.hasPermission)
+          if (!result.hasPermission)
+            this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.POST_NOTIFICATIONS);
+        },
+        err => this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.POST_NOTIFICATIONS)
+      );
 
       Catapush.enableLog(
         () => {

@@ -199,11 +199,11 @@ In your app `config.xml` file add the necessary preferences to enable Kotlin and
   ...
   <preference name="GradlePluginKotlinEnabled" value="true" />
   <preference name="GradlePluginKotlinCodeStyle" value="official" />
-  <preference name="GradlePluginKotlinVersion" value="1.5.31" />
+  <preference name="GradlePluginKotlinVersion" value="1.7.21" />
   <preference name="AndroidXEnabled" value="true" />
   ...
   <platform name="android">
-    <preference name="android-targetSdkVersion" value="31" />
+    <preference name="android-targetSdkVersion" value="33" />
     ...
   </platform>
   ...
