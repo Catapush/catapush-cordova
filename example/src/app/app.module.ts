@@ -11,14 +11,13 @@ import { HomeComponent } from './home/home.component';
 import { MessageListComponent } from './message-list/message-list.component';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    MessageListComponent,
-    HomeComponent
-  ],
-  entryComponents: [],
-  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, FormsModule],
-  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
-  bootstrap: [AppComponent],
+    declarations: [
+        AppComponent,
+        MessageListComponent,
+        HomeComponent
+    ],
+    imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, FormsModule],
+    providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
+    bootstrap: [AppComponent]
 })
 export class AppModule { }
