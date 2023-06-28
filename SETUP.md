@@ -192,7 +192,7 @@ You should also add this information in the App plist and the Extension plist (`
 
 
 ### [Android] Enable Kotlin and AndroidX
-In your app `config.xml` file add the necessary preferences to enable Kotlin and AndroidX and set target SDK 31 for the Android builds:
+In your app `config.xml` file add the necessary preferences to enable Kotlin and AndroidX and set target SDK 33 or higher for the Android builds:
 ```xml
 <widget id="com.catapush.cordova.sdk.example" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
   <name>example</name>
@@ -209,6 +209,7 @@ In your app `config.xml` file add the necessary preferences to enable Kotlin and
   ...
 </widget>
 ```
+If you're using cordova-android 12 or later you won't need to specify the target SDK version of 33.
 
 ### [Android] Import your google-services.json file 
 Copy your `google-services.json` file in the root folder of your app project and declare it under the android platform node of your `config.xml`:
