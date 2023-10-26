@@ -22,6 +22,6 @@ buildscript {
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${cordovaConfig.KOTLIN_VERSION}"
     implementation 'androidx.multidex:multidex:2.0.1'
-    api 'com.catapush.catapush-android-sdk:core:13.0.0'
-    api 'com.catapush.catapush-android-sdk:gms:13.0.0'
+    api 'com.catapush.catapush-android-sdk:core:13.0.4'
+    api 'com.catapush.catapush-android-sdk:gms:13.0.4'
 }
