@@ -27,7 +27,7 @@
     "cordova-ios": "6.2.0",
     "rxjs": "~6.6.0",
     "tslib": "^2.2.0",
-    "zone.js": "~0.13.1"
+    "zone.js": "^0.14.6"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^16.1.1",
