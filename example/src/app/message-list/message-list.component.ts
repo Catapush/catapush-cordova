@@ -1,5 +1,5 @@
 import { Component, HostListener } from '@angular/core';
-import { FileChooser } from '@ionic-native/file-chooser';
+import { Chooser } from '@awesome-cordova-plugins/Chooser/ngx';
 import { Catapush, CatapushError, CatapushFile, CatapushMessage, CatapushState } from 'plugins/catapush-cordova-sdk/types';
 
 declare var Catapush: Catapush;
@@ -7,14 +7,15 @@ declare var Catapush: Catapush;
 @Component({
   selector: 'app-message-list',
   templateUrl: './message-list.component.html',
-  styleUrls: ['./message-list.component.scss']
+  styleUrls: ['./message-list.component.scss'],
+  providers: [Chooser]
 })
 export class MessageListComponent {
   messages: CatapushMessage[] = [];
   attachments: Map<string, CatapushFile> = new Map<string, CatapushFile>();
   newMessageBody: string = '';
 
-  constructor() {
+  constructor(private chooser: Chooser) {
     this.loadMessages();
 
     Catapush.pauseNotifications(
@@ -97,8 +98,8 @@ export class MessageListComponent {
   }
 
   sendAttachment(): void {
-    FileChooser.open({ mime: 'image/*' })
-      .then(uri => {
+    this.chooser.getFile({ mimeTypes: 'image/*' })
+      .then(result => {
         Catapush.sendMessage(
           () => {
             this.newMessageBody = '';
@@ -108,7 +109,7 @@ export class MessageListComponent {
           (message: string) => {
             console.log('Catapush sendAttachment failed: ' + message);
           },
-          { body: '', file: { mimeType: '', url: uri } }
+          { body: '', file: { mimeType: '', url: result.path } }
         );
       })
       .catch(e => console.log('Catapush file choice failed: ' + e));
