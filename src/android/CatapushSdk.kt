@@ -8,15 +8,14 @@ import com.catapush.library.interfaces.Callback
 import com.catapush.library.interfaces.RecoverableErrorCallback
 import com.catapush.library.messages.CatapushMessage
 import com.catapush.library.push.models.PushPluginType
+import java.io.File
+import java.io.FileOutputStream
+import java.lang.ref.WeakReference
 import org.apache.cordova.CallbackContext
 import org.apache.cordova.CordovaPlugin
 import org.apache.cordova.PluginResult
 import org.json.JSONArray
 import org.json.JSONObject
-import java.io.File
-import java.io.FileOutputStream
-import java.lang.ref.WeakReference
-
 
 class CatapushSdk : CordovaPlugin(), IMessagesDispatchDelegate, IStatusDispatchDelegate {
 
@@ -183,6 +182,7 @@ class CatapushSdk : CordovaPlugin(), IMessagesDispatchDelegate, IStatusDispatchD
     CatapushCordovaEventDelegate.setContext(cordova.context)
 
     inited = (Catapush.getInstance() as Catapush).waitInitialization()
+    (Catapush.getInstance() as Catapush).setAppKey(appId)
     if (inited) {
       tryDispatchQueuedEvents()
       val pluginResult = PluginResult(PluginResult.Status.OK, true)
