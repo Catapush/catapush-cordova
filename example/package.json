@@ -80,6 +80,13 @@
     "plugins": {
       "cordova-plugin-ionic-keyboard": {},
       "cordova-plugin-filechooser": {},
+      "cordova-plugin-android-permissions": {},
+      "cordova-plugin-chooser": {},
+      "cordova-plugin-device": {},
+      "cordova-plugin-ionic-webview": {},
+      "cordova-plugin-statusbar": {},
+      "cordova-plugin-add-swift-support": {},
+      "cordova-plugin-splashscreen": {},
       "catapush-cordova-sdk": {
         "CATAPUSH_APP_KEY": "SET_YOUR_CATAPUSH_APP_KEY",
         "NOTIFICATION_CHANNEL_ID": "com.catapush.cordova.sdk.channel",
@@ -87,14 +94,7 @@
         "NOTIFICATION_TITLE": " ",
         "NOTIFICATION_ICON_RES": "ic_stat_notify",
         "NOTIFICATION_COLOR_HEX": "#50BFF7"
-      },
-      "cordova-plugin-android-permissions": {},
-      "cordova-plugin-chooser": {},
-      "cordova-plugin-device": {},
-      "cordova-plugin-ionic-webview": {},
-      "cordova-plugin-statusbar": {},
-      "cordova-plugin-add-swift-support": {},
-      "cordova-plugin-splashscreen": {}
+      }
     },
     "platforms": [
       "android",
