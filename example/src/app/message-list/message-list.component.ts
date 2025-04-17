@@ -5,10 +5,11 @@ import { Catapush, CatapushError, CatapushFile, CatapushMessage, CatapushState }
 declare var Catapush: Catapush;
 
 @Component({
-  selector: 'app-message-list',
-  templateUrl: './message-list.component.html',
-  styleUrls: ['./message-list.component.scss'],
-  providers: [Chooser]
+    selector: 'app-message-list',
+    templateUrl: './message-list.component.html',
+    styleUrls: ['./message-list.component.scss'],
+    providers: [Chooser],
+    standalone: false
 })
 export class MessageListComponent {
   messages: CatapushMessage[] = [];

@@ -7,9 +7,10 @@ import { AndroidPermissions } from '@awesome-cordova-plugins/android-permissions
 declare var Catapush: Catapush;
 
 @Component({
-  selector: 'app-root',
-  templateUrl: 'app.component.html',
-  styleUrls: ['app.component.scss'],
+    selector: 'app-root',
+    templateUrl: 'app.component.html',
+    styleUrls: ['app.component.scss'],
+    standalone: false
 })
 export class AppComponent {
 
