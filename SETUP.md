@@ -266,9 +266,27 @@ If you want to be able to receive the messages while your app is not running in 
 You can now initialize Catapush using the following code:
 
 ```js
-Catapush.enableLog(true);
+// Enable the SDK logging to better debug your integration
+Catapush.enableLog(
+  () => {
+    console.log('Catapush enableLog success');
+  },
+  (message: string) => {
+    console.log('Catapush enableLog failed: ' + message);
+  },
+  true // or false to disable the SDK logging
+);
 
-Catapush.init('YOUR_APP_KEY')
+// Initialize the SDK
+Catapush.init(
+  () => {
+    console.log('Catapush init success');
+  },
+  (message: string) => {
+    console.log('Catapush init failed: ' + message);
+  },
+  'YOUR_APP_KEY'
+);
 ```
 
 Register CatapushStateDelegate and CatapushMessageDelegate in order to recieve update regard the state of the connection and the state of the messages.
@@ -296,35 +314,69 @@ export interface CatapushMessageDelegate {
 In order to start Catapush you have to set a user and call the start method.
 
 ```js
-await Catapush.setUser('ios', 'ios')
-Catapush.start()
+Catapush.setUser(
+  () => {
+    console.log('Catapush setUser success');
+
+    // The user has been set successfully, now we can start the SDK
+    Catapush.start(
+      () => {
+        console.log('Catapush start success');
+      },
+      (message: string) => {
+        console.log('Catapush start failed: ' + message);
+      }
+    );
+  },
+  (message: string) => {
+    console.log('Catapush setUser failed: ' + message);
+  },
+  'YOUR_CATAPUSH_USER_IDENTIFIER',
+  'YOUR_CATAPUSH_USER_PASSWORD'
+);
 ```
 
 To send a message:
 ```js
-await Catapush.sendMessage(outboundMessage, null, null)
+Catapush.sendMessage(
+  () => {
+    console.log('Catapush sendMessage success');
+  },
+  (message: string) => {
+    console.log('Catapush sendMessage failed: ' + message);
+  },
+  outboundMessage
+);
 ```
 
 To receive a message check the catapushMessageReceived method of your CatapushMessageDelegate.
 ```js
 catapushMessageReceived(message: CatapushMessage) {
-    
+  // Put your inbound messages code handling here
 }
 ```
 
 To send read receipt:
 ```js
-await Catapush.sendMessageReadNotificationWithId("id")
+Catapush.sendMessageReadNotificationWithId(
+  () => {
+    console.log('Catapush sendMessageReadNotificationWithId success');
+  },
+  (message: string) => {
+    console.log('Catapush sendMessageReadNotificationWithId failed: ' + message);
+  },
+  messageId
+);
 ```
 
 To retrieve all received messages:
 ```js
 Catapush.allMessages(
   (messages: CatapushMessage[]) => {
-    // success
+    console.log('Catapush allMessages success');
   },
   (message: string) => {
-    // error
+    console.log('Catapush allMessages failed: ' + message);
   }
 );
 ```
