@@ -1,5 +1,5 @@
 import catapush_ios_sdk_pod
-import CoreServices
+import UniformTypeIdentifiers
 
 @objc(CatapushSdk) class CatapushSdk : CDVPlugin, MessageDispatchSendResult, StateDispatchSendResult {
     
@@ -172,12 +172,12 @@ import CoreServices
             if messageIP.hasMedia() {
                 if messageIP.mm != nil {
                     guard let mime = messageIP.mmType,
-                          let uti = UTTypeCreatePreferredIdentifierForTag(kUTTagClassMIMEType, mime as CFString, nil),
-                          let ext = UTTypeCopyPreferredTagWithClass(uti.takeRetainedValue(), kUTTagClassFilenameExtension) else{
+                          let utType = UTType(mimeType: mime),
+                          let ext = utType.preferredFilenameExtension else {
                               return
                           }
                     let tempDirectoryURL = NSURL.fileURL(withPath: NSTemporaryDirectory(), isDirectory: true)
-                    let filePath = tempDirectoryURL.appendingPathComponent("\(messageIP.messageId).\(ext.takeRetainedValue())")
+                    let filePath = tempDirectoryURL.appendingPathComponent("\(messageIP.messageId).\(ext)")
                     let fileManager = FileManager.default
                     if fileManager.fileExists(atPath: filePath.path) {
                         self.commandDelegate.send(CDVPluginResult(status: CDVCommandStatus_OK, messageAs: ["url": filePath.path, "mimeType": mime]), callbackId: command.callbackId)
@@ -200,12 +200,12 @@ import CoreServices
                                 if messageIP.hasMedia() {
                                     if messageIP.mm != nil {
                                         guard let mime = messageIP.mmType,
-                                              let uti = UTTypeCreatePreferredIdentifierForTag(kUTTagClassMIMEType, mime as CFString, nil),
-                                              let ext = UTTypeCopyPreferredTagWithClass(uti.takeRetainedValue(), kUTTagClassFilenameExtension) else{
+                                              let utType = UTType(mimeType: mime),
+                                              let ext = utType.preferredFilenameExtension else {
                                                   return
                                               }
                                         let tempDirectoryURL = NSURL.fileURL(withPath: NSTemporaryDirectory(), isDirectory: true)
-                                        let filePath = tempDirectoryURL.appendingPathComponent("\(messageIP.messageId).\(ext.takeRetainedValue())")
+                                        let filePath = tempDirectoryURL.appendingPathComponent("\(messageIP.messageId).\(ext)")
                                         let fileManager = FileManager.default
                                         if fileManager.fileExists(atPath: filePath.path) {
                                             self.commandDelegate.send(CDVPluginResult(status: CDVCommandStatus_OK, messageAs: ["url": filePath.path]), callbackId: command.callbackId)
