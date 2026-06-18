@@ -11,12 +11,12 @@ import UniformTypeIdentifiers
     @objc(`init`:)
     func `init`(command: CDVInvokedUrlCommand) {
         guard let appKey = command.argument(at: 0) as? String else {
-            self.commandDelegate.send(CDVPluginResult(status: CDVCommandStatus_ERROR, messageAs: "Bad argument"), callbackId: command.callbackId);
+            self.commandDelegate.send(CDVPluginResult(status: CDVCommandStatus.error, messageAs: "Bad argument"), callbackId: command.callbackId);
             return
         }
         Catapush.setAppKey(appKey)
         UNUserNotificationCenter.current().delegate = self
-        let result = CDVPluginResult(status: CDVCommandStatus_OK)
+        let result = CDVPluginResult(status: CDVCommandStatus.ok)
         self.commandDelegate.send(result, callbackId: command.callbackId)
         catapushDelegate = CatapushDelegateClass(channel: self)
         messagesDispatcherDelegate = MessagesDispatchDelegateClass(channel: self)
@@ -40,7 +40,7 @@ import UniformTypeIdentifiers
     @objc(subscribeMessageDelegate:)
     func subscribeMessageDelegate(command: CDVInvokedUrlCommand) {
         messageDelegateCommandCallback = command
-        let result = CDVPluginResult(status: CDVCommandStatus_NO_RESULT)
+        let result = CDVPluginResult(status: CDVCommandStatus.noResult)
         result.keepCallback = true
         self.commandDelegate.send(result, callbackId: command.callbackId)
     }
@@ -48,7 +48,7 @@ import UniformTypeIdentifiers
     @objc(subscribeStateDelegate:)
     func subscribeStateDelegate(command: CDVInvokedUrlCommand) {
         stateDelegateCommandCallback = command
-        let result = CDVPluginResult(status: CDVCommandStatus_NO_RESULT)
+        let result = CDVPluginResult(status: CDVCommandStatus.noResult)
         result.keepCallback = true
         self.commandDelegate.send(result, callbackId: command.callbackId)
     }
@@ -56,20 +56,20 @@ import UniformTypeIdentifiers
     @objc(unsubscribeMessageDelegate:)
     func unsubscribeMessageDelegate(command: CDVInvokedUrlCommand) {
         messageDelegateCommandCallback = nil
-        let result = CDVPluginResult(status: CDVCommandStatus_NO_RESULT)
+        let result = CDVPluginResult(status: CDVCommandStatus.noResult)
         self.commandDelegate.send(result, callbackId: command.callbackId)
     }
     
     @objc(unsubscribeStateDelegate:)
     func unsubscribeStateDelegate(command: CDVInvokedUrlCommand) {
         stateDelegateCommandCallback = nil
-        let result = CDVPluginResult(status: CDVCommandStatus_NO_RESULT)
+        let result = CDVPluginResult(status: CDVCommandStatus.noResult)
         self.commandDelegate.send(result, callbackId: command.callbackId)
     }
     
     @objc(pauseNotifications:)
     func pauseNotifications(command: CDVInvokedUrlCommand) {
-        let result = CDVPluginResult(status: CDVCommandStatus_OK)
+        let result = CDVPluginResult(status: CDVCommandStatus.ok)
         self.commandDelegate.send(result, callbackId: command.callbackId)
     }
     
@@ -77,7 +77,7 @@ import UniformTypeIdentifiers
     func enableLog(command: CDVInvokedUrlCommand) {
         let enabled = command.argument(at: 0, withDefault: false) as? Bool ?? false
         Catapush.enableLog(enabled)
-        let result = CDVPluginResult(status: CDVCommandStatus_OK)
+        let result = CDVPluginResult(status: CDVCommandStatus.ok)
         self.commandDelegate.send(result, callbackId: command.callbackId)
     }
     
@@ -86,20 +86,20 @@ import UniformTypeIdentifiers
         var error: NSError?
         Catapush.start(&error)
         if let error = error {
-            self.commandDelegate.send(CDVPluginResult(status: CDVCommandStatus_ERROR, messageAs: error.description), callbackId: command.callbackId);
+            self.commandDelegate.send(CDVPluginResult(status: CDVCommandStatus.error, messageAs: error.description), callbackId: command.callbackId);
         } else {
-            self.commandDelegate.send(CDVPluginResult(status: CDVCommandStatus_OK), callbackId: command.callbackId);
+            self.commandDelegate.send(CDVPluginResult(status: CDVCommandStatus.ok), callbackId: command.callbackId);
         }
     }
     
     @objc(setUser:)
     func setUser(command: CDVInvokedUrlCommand) {
         guard let identifier = command.argument(at: 0) as? String, let password = command.argument(at: 1) as? String else {
-            self.commandDelegate.send(CDVPluginResult(status: CDVCommandStatus_ERROR, messageAs: "Bad arguments"), callbackId: command.callbackId);
+            self.commandDelegate.send(CDVPluginResult(status: CDVCommandStatus.error, messageAs: "Bad arguments"), callbackId: command.callbackId);
             return
         }
         Catapush.setIdentifier(identifier, andPassword: password)
-        self.commandDelegate.send(CDVPluginResult(status: CDVCommandStatus_OK), callbackId: command.callbackId)
+        self.commandDelegate.send(CDVPluginResult(status: CDVCommandStatus.ok), callbackId: command.callbackId)
     }
     
     @objc(allMessages:)
@@ -107,13 +107,13 @@ import UniformTypeIdentifiers
         let result = (Catapush.allMessages() as! [MessageIP]).map {
             return CatapushSdk.formatMessageID(message: $0)
         }
-        self.commandDelegate.send(CDVPluginResult(status: CDVCommandStatus_OK, messageAs: result), callbackId: command.callbackId)
+        self.commandDelegate.send(CDVPluginResult(status: CDVCommandStatus.ok, messageAs: result), callbackId: command.callbackId)
     }
 
     @objc(sendMessage:)
     func sendMessage(command: CDVInvokedUrlCommand) {
         guard let arg = command.argument(at: 0) as? Dictionary<String,Any> else {
-            self.commandDelegate.send(CDVPluginResult(status: CDVCommandStatus_ERROR, messageAs: "Bad arguments"), callbackId: command.callbackId);
+            self.commandDelegate.send(CDVPluginResult(status: CDVCommandStatus.error, messageAs: "Bad arguments"), callbackId: command.callbackId);
             return
         }
         let text = arg["text"] as? String
@@ -152,16 +152,16 @@ import UniformTypeIdentifiers
             }
         }
         guard let message = message else {
-            self.commandDelegate.send(CDVPluginResult(status: CDVCommandStatus_ERROR), callbackId: command.callbackId);
+            self.commandDelegate.send(CDVPluginResult(status: CDVCommandStatus.error), callbackId: command.callbackId);
             return
         }
-        self.commandDelegate.send(CDVPluginResult(status: CDVCommandStatus_OK, messageAs: CatapushSdk.formatMessageID(message: message) as [AnyHashable : Any]), callbackId: command.callbackId)
+        self.commandDelegate.send(CDVPluginResult(status: CDVCommandStatus.ok, messageAs: CatapushSdk.formatMessageID(message: message) as [AnyHashable : Any]), callbackId: command.callbackId)
     }
     
     @objc(getAttachmentUrlForMessage:)
     func getAttachmentUrlForMessage(command: CDVInvokedUrlCommand) {
         guard let id = command.argument(at: 0) as? String else {
-            self.commandDelegate.send(CDVPluginResult(status: CDVCommandStatus_ERROR, messageAs: "Bad argument"), callbackId: command.callbackId);
+            self.commandDelegate.send(CDVPluginResult(status: CDVCommandStatus.error, messageAs: "Bad argument"), callbackId: command.callbackId);
             return
         }
         
@@ -180,18 +180,18 @@ import UniformTypeIdentifiers
                     let filePath = tempDirectoryURL.appendingPathComponent("\(messageIP.messageId).\(ext)")
                     let fileManager = FileManager.default
                     if fileManager.fileExists(atPath: filePath.path) {
-                        self.commandDelegate.send(CDVPluginResult(status: CDVCommandStatus_OK, messageAs: ["url": filePath.path, "mimeType": mime]), callbackId: command.callbackId)
+                        self.commandDelegate.send(CDVPluginResult(status: CDVCommandStatus.ok, messageAs: ["url": filePath.path, "mimeType": mime]), callbackId: command.callbackId)
                     }
                     do {
                         try messageIP.mm!.write(to: filePath)
-                        self.commandDelegate.send(CDVPluginResult(status: CDVCommandStatus_OK, messageAs: ["url": filePath.path, "mimeType": mime]), callbackId: command.callbackId)
+                        self.commandDelegate.send(CDVPluginResult(status: CDVCommandStatus.ok, messageAs: ["url": filePath.path, "mimeType": mime]), callbackId: command.callbackId)
                     } catch {
-                        self.commandDelegate.send(CDVPluginResult(status: CDVCommandStatus_ERROR, messageAs: ["error": error.localizedDescription]), callbackId: command.callbackId)
+                        self.commandDelegate.send(CDVPluginResult(status: CDVCommandStatus.error, messageAs: ["error": error.localizedDescription]), callbackId: command.callbackId)
                     }
                 }else{
                     messageIP.downloadMedia { (error, data) in
                         if(error != nil){
-                            self.commandDelegate.send(CDVPluginResult(status: CDVCommandStatus_ERROR, messageAs: ["error": error?.localizedDescription ?? ""]), callbackId: command.callbackId)
+                            self.commandDelegate.send(CDVPluginResult(status: CDVCommandStatus.error, messageAs: ["error": error?.localizedDescription ?? ""]), callbackId: command.callbackId)
                         }else{
                             let predicate = NSPredicate(format: "messageId = %@", id)
                             let matches = Catapush.messages(with: predicate)
@@ -208,44 +208,44 @@ import UniformTypeIdentifiers
                                         let filePath = tempDirectoryURL.appendingPathComponent("\(messageIP.messageId).\(ext)")
                                         let fileManager = FileManager.default
                                         if fileManager.fileExists(atPath: filePath.path) {
-                                            self.commandDelegate.send(CDVPluginResult(status: CDVCommandStatus_OK, messageAs: ["url": filePath.path]), callbackId: command.callbackId)
+                                            self.commandDelegate.send(CDVPluginResult(status: CDVCommandStatus.ok, messageAs: ["url": filePath.path]), callbackId: command.callbackId)
                                         }
                                         do {
                                             try messageIP.mm!.write(to: filePath)
-                                            self.commandDelegate.send(CDVPluginResult(status: CDVCommandStatus_OK, messageAs: ["url": filePath.path, "mimeType": mime]), callbackId: command.callbackId)
+                                            self.commandDelegate.send(CDVPluginResult(status: CDVCommandStatus.ok, messageAs: ["url": filePath.path, "mimeType": mime]), callbackId: command.callbackId)
                                         } catch {
-                                            self.commandDelegate.send(CDVPluginResult(status: CDVCommandStatus_ERROR, messageAs: ["error": error.localizedDescription]), callbackId: command.callbackId)
+                                            self.commandDelegate.send(CDVPluginResult(status: CDVCommandStatus.error, messageAs: ["error": error.localizedDescription]), callbackId: command.callbackId)
                                         }
                                     }else{
-                                        self.commandDelegate.send(CDVPluginResult(status: CDVCommandStatus_OK, messageAs: ["url": ""]), callbackId: command.callbackId)
+                                        self.commandDelegate.send(CDVPluginResult(status: CDVCommandStatus.ok, messageAs: ["url": ""]), callbackId: command.callbackId)
                                     }
                                     return
                                 }else{
-                                    self.commandDelegate.send(CDVPluginResult(status: CDVCommandStatus_OK, messageAs: ["url": ""]), callbackId: command.callbackId)
+                                    self.commandDelegate.send(CDVPluginResult(status: CDVCommandStatus.ok, messageAs: ["url": ""]), callbackId: command.callbackId)
                                 }
                             }else{
-                                self.commandDelegate.send(CDVPluginResult(status: CDVCommandStatus_OK, messageAs: ["url": ""]), callbackId: command.callbackId)
+                                self.commandDelegate.send(CDVPluginResult(status: CDVCommandStatus.ok, messageAs: ["url": ""]), callbackId: command.callbackId)
                             }
                         }
                     }
                 }
                 return
             }else{
-                self.commandDelegate.send(CDVPluginResult(status: CDVCommandStatus_OK, messageAs: ["url": ""]), callbackId: command.callbackId)
+                self.commandDelegate.send(CDVPluginResult(status: CDVCommandStatus.ok, messageAs: ["url": ""]), callbackId: command.callbackId)
             }
         }else{
-            self.commandDelegate.send(CDVPluginResult(status: CDVCommandStatus_OK, messageAs: ["url": ""]), callbackId: command.callbackId)
+            self.commandDelegate.send(CDVPluginResult(status: CDVCommandStatus.ok, messageAs: ["url": ""]), callbackId: command.callbackId)
         }
     }
     
     @objc(sendMessageReadNotificationWithId:)
     func sendMessageReadNotificationWithId(command: CDVInvokedUrlCommand) {
         guard let id = command.argument(at: 0) as? String else {
-            self.commandDelegate.send(CDVPluginResult(status: CDVCommandStatus_ERROR, messageAs: "Bad argument"), callbackId: command.callbackId);
+            self.commandDelegate.send(CDVPluginResult(status: CDVCommandStatus.error, messageAs: "Bad argument"), callbackId: command.callbackId);
             return
         }
         MessageIP.sendMessageReadNotification(withId: id)
-        self.commandDelegate.send(CDVPluginResult(status: CDVCommandStatus_OK), callbackId: command.callbackId)
+        self.commandDelegate.send(CDVPluginResult(status: CDVCommandStatus.ok), callbackId: command.callbackId)
     }
     
     public static func formatMessageID(message: MessageIP) -> Dictionary<String, Any?>{
@@ -305,7 +305,7 @@ import UniformTypeIdentifiers
                         "event": "INVALID_APP_KEY",
                         "code": CatapushErrorCode.INVALID_APP_KEY.rawValue
                     ] as [String : Any]
-                    channel.stateDispatchSendResult(result: CDVPluginResult(status: CDVCommandStatus_OK, messageAs: result))
+                    channel.stateDispatchSendResult(result: CDVPluginResult(status: CDVCommandStatus.ok, messageAs: result))
                     break;
                 case CatapushErrorCode.USER_NOT_FOUND.rawValue:
                     /*
@@ -317,7 +317,7 @@ import UniformTypeIdentifiers
                         "event": "USER_NOT_FOUND",
                         "code": CatapushErrorCode.USER_NOT_FOUND.rawValue
                     ] as [String : Any]
-                    channel.stateDispatchSendResult(result: CDVPluginResult(status: CDVCommandStatus_OK, messageAs: result))
+                    channel.stateDispatchSendResult(result: CDVPluginResult(status: CDVCommandStatus.ok, messageAs: result))
                     break;
                 case CatapushErrorCode.WRONG_AUTHENTICATION.rawValue:
                     /*
@@ -330,7 +330,7 @@ import UniformTypeIdentifiers
                         "event": "WRONG_AUTHENTICATION",
                         "code": CatapushErrorCode.WRONG_AUTHENTICATION.rawValue
                     ] as [String : Any]
-                    channel.stateDispatchSendResult(result: CDVPluginResult(status: CDVCommandStatus_OK, messageAs: result))
+                    channel.stateDispatchSendResult(result: CDVPluginResult(status: CDVCommandStatus.ok, messageAs: result))
                     break;
                 case CatapushErrorCode.GENERIC.rawValue:
                     /*
@@ -350,7 +350,7 @@ import UniformTypeIdentifiers
                         "event": "XMPP_MULTIPLE_LOGIN",
                         "code": CatapushErrorCode.XMPP_MULTIPLE_LOGIN.rawValue
                     ] as [String : Any]
-                    channel.stateDispatchSendResult(result: CDVPluginResult(status: CDVCommandStatus_OK, messageAs: result))
+                    channel.stateDispatchSendResult(result: CDVPluginResult(status: CDVCommandStatus.ok, messageAs: result))
                     break;
                 case CatapushErrorCode.API_UNAUTHORIZED.rawValue:
                     /*
@@ -363,7 +363,7 @@ import UniformTypeIdentifiers
                         "event": "API_UNAUTHORIZED",
                         "code": CatapushErrorCode.API_UNAUTHORIZED.rawValue
                     ] as [String : Any]
-                    channel.stateDispatchSendResult(result: CDVPluginResult(status: CDVCommandStatus_OK, messageAs: result))
+                    channel.stateDispatchSendResult(result: CDVPluginResult(status: CDVCommandStatus.ok, messageAs: result))
                     break;
                 case CatapushErrorCode.API_INTERNAL_ERROR.rawValue:
                     /*
@@ -394,7 +394,7 @@ import UniformTypeIdentifiers
                         "event": "REGISTRATION_FORBIDDEN_WRONG_AUTH",
                         "code": CatapushErrorCode.REGISTRATION_FORBIDDEN_WRONG_AUTH.rawValue
                     ] as [String : Any]
-                    channel.stateDispatchSendResult(result: CDVPluginResult(status: CDVCommandStatus_OK, messageAs: result))
+                    channel.stateDispatchSendResult(result: CDVPluginResult(status: CDVCommandStatus.ok, messageAs: result))
                     break;
                 case CatapushErrorCode.REGISTRATION_NOT_FOUND_APPLICATION.rawValue:
                     /*
@@ -408,7 +408,7 @@ import UniformTypeIdentifiers
                         "event": "REGISTRATION_NOT_FOUND_APPLICATION",
                         "code": CatapushErrorCode.REGISTRATION_NOT_FOUND_APPLICATION.rawValue
                     ] as [String : Any]
-                    channel.stateDispatchSendResult(result: CDVPluginResult(status: CDVCommandStatus_OK, messageAs: result))
+                    channel.stateDispatchSendResult(result: CDVPluginResult(status: CDVCommandStatus.ok, messageAs: result))
                     break;
                 case CatapushErrorCode.REGISTRATION_NOT_FOUND_USER.rawValue:
                     /*
@@ -422,7 +422,7 @@ import UniformTypeIdentifiers
                         "event": "REGISTRATION_NOT_FOUND_USER",
                         "code": CatapushErrorCode.REGISTRATION_NOT_FOUND_USER.rawValue
                     ] as [String : Any]
-                    channel.stateDispatchSendResult(result: CDVPluginResult(status: CDVCommandStatus_OK, messageAs: result))
+                    channel.stateDispatchSendResult(result: CDVPluginResult(status: CDVCommandStatus.ok, messageAs: result))
                     break;
                 case CatapushErrorCode.REGISTRATION_INTERNAL_ERROR.rawValue:
                     /*
@@ -477,7 +477,7 @@ import UniformTypeIdentifiers
                         "event": "UPDATE_PUSH_TOKEN_FORBIDDEN_WRONG_AUTH",
                         "code": CatapushErrorCode.UPDATE_PUSH_TOKEN_FORBIDDEN_WRONG_AUTH.rawValue
                     ] as [String : Any]
-                    channel.stateDispatchSendResult(result: CDVPluginResult(status: CDVCommandStatus_OK, messageAs: result))
+                    channel.stateDispatchSendResult(result: CDVPluginResult(status: CDVCommandStatus.ok, messageAs: result))
                     break;
                 case CatapushErrorCode.UPDATE_PUSH_TOKEN_FORBIDDEN_NOT_PERMITTED.rawValue:
                     /*
@@ -492,7 +492,7 @@ import UniformTypeIdentifiers
                         "event": "UPDATE_PUSH_TOKEN_FORBIDDEN_NOT_PERMITTED",
                         "code": CatapushErrorCode.UPDATE_PUSH_TOKEN_FORBIDDEN_NOT_PERMITTED.rawValue
                     ] as [String : Any]
-                    channel.stateDispatchSendResult(result: CDVPluginResult(status: CDVCommandStatus_OK, messageAs: result))
+                    channel.stateDispatchSendResult(result: CDVPluginResult(status: CDVCommandStatus.ok, messageAs: result))
                     break;
                 case CatapushErrorCode.UPDATE_PUSH_TOKEN_NOT_FOUND_CUSTOMER.rawValue:
                     /*
@@ -506,7 +506,7 @@ import UniformTypeIdentifiers
                         "event": "UPDATE_PUSH_TOKEN_NOT_FOUND_CUSTOMER",
                         "code": CatapushErrorCode.UPDATE_PUSH_TOKEN_NOT_FOUND_CUSTOMER.rawValue
                     ] as [String : Any]
-                    channel.stateDispatchSendResult(result: CDVPluginResult(status: CDVCommandStatus_OK, messageAs: result))
+                    channel.stateDispatchSendResult(result: CDVPluginResult(status: CDVCommandStatus.ok, messageAs: result))
                     break;
                 case CatapushErrorCode.UPDATE_PUSH_TOKEN_NOT_FOUND_APPLICATION.rawValue:
                     /*
@@ -520,7 +520,7 @@ import UniformTypeIdentifiers
                         "event": "UPDATE_PUSH_TOKEN_NOT_FOUND_APPLICATION",
                         "code": CatapushErrorCode.UPDATE_PUSH_TOKEN_NOT_FOUND_APPLICATION.rawValue
                     ] as [String : Any]
-                    channel.stateDispatchSendResult(result: CDVPluginResult(status: CDVCommandStatus_OK, messageAs: result))
+                    channel.stateDispatchSendResult(result: CDVPluginResult(status: CDVCommandStatus.ok, messageAs: result))
                     break;
                 case CatapushErrorCode.UPDATE_PUSH_TOKEN_NOT_FOUND_USER.rawValue:
                     /*
@@ -535,7 +535,7 @@ import UniformTypeIdentifiers
                         "event": "UPDATE_PUSH_TOKEN_NOT_FOUND_USER",
                         "code": CatapushErrorCode.UPDATE_PUSH_TOKEN_NOT_FOUND_USER.rawValue
                     ] as [String : Any]
-                    channel.stateDispatchSendResult(result: CDVPluginResult(status: CDVCommandStatus_OK, messageAs: result))
+                    channel.stateDispatchSendResult(result: CDVPluginResult(status: CDVCommandStatus.ok, messageAs: result))
                     break;
                 case CatapushErrorCode.UPDATE_PUSH_TOKEN_INTERNAL_ERROR.rawValue:
                     /*
@@ -566,7 +566,7 @@ import UniformTypeIdentifiers
                         "event": "PUSH_TOKEN_UNAVAILABLE",
                         "code": CatapushErrorCode.PUSH_TOKEN_UNAVAILABLE.rawValue
                     ] as [String : Any]
-                    channel.stateDispatchSendResult(result: CDVPluginResult(status: CDVCommandStatus_OK, messageAs: result))
+                    channel.stateDispatchSendResult(result: CDVPluginResult(status: CDVCommandStatus.ok, messageAs: result))
                     break;
                 default:
                     break;
@@ -598,7 +598,7 @@ import UniformTypeIdentifiers
                 "eventName": "Catapush#catapushMessageReceived",
                 "message": CatapushSdk.formatMessageID(message: messageIP)
             ] as [String : Any]
-            channel.messageDispatchSendResult(result: CDVPluginResult(status: CDVCommandStatus_OK, messageAs: result))
+            channel.messageDispatchSendResult(result: CDVPluginResult(status: CDVCommandStatus.ok, messageAs: result))
         }
     }
     
@@ -626,7 +626,7 @@ extension CatapushSdk: UNUserNotificationCenterDelegate {
                     "eventName": "Catapush#catapushNotificationTapped",
                     "message": CatapushSdk.formatMessageID(message: messageIP)
                 ] as [String : Any]
-                messageDispatchSendResult(result: CDVPluginResult(status: CDVCommandStatus_OK, messageAs: result))
+                messageDispatchSendResult(result: CDVPluginResult(status: CDVCommandStatus.ok, messageAs: result))
                 var newPendingMessages: Dictionary<String, String>?
                 if (pendingMessages == nil) {
                     newPendingMessages = Dictionary()
