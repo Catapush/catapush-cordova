@@ -46,7 +46,7 @@
     "@types/node": "^22.14.1",
     "@typescript-eslint/eslint-plugin": "^8.30.1",
     "@typescript-eslint/parser": "^8.30.1",
-    "catapush-cordova": "file:..",
+    "catapush-cordova": "file:../plugin",
     "cordova-android": "^14.0.0",
     "cordova-ios": "^7.1.1",
     "cordova-plugin-add-swift-support": "^2.0.2",
