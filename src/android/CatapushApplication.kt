@@ -1,11 +1,11 @@
 package com.catapush.cordova.sdk
 
+import android.app.Activity
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.graphics.Color
 import android.os.Build
 import androidx.multidex.MultiDexApplication
-import com.catapush.cordova.sdk.example.MainActivity
 import com.catapush.library.Catapush
 import com.catapush.library.gms.CatapushGms
 import com.catapush.library.interfaces.Callback
@@ -72,13 +72,19 @@ class CatapushApplication : MultiDexApplication(), ICatapushInitializer {
       }
     }
 
+    val launchIntent = packageManager.getLaunchIntentForPackage(packageName)
+    @Suppress("UNCHECKED_CAST")
+    val launcherActivityClass: Class<out Activity> = launchIntent?.component?.className
+      ?.let { runCatching { Class.forName(it) as? Class<out Activity> }.getOrNull() }
+      ?: Activity::class.java
+
     Catapush.getInstance()
       .init(
         this,
         this,
         CatapushCordovaEventDelegate,
         Collections.singletonList(CatapushGms),
-        CatapushCordovaIntentProvider(MainActivity::class.java),
+        CatapushCordovaIntentProvider(launcherActivityClass),
         notificationTemplate,
         null,
         object : Callback<Boolean?> {
