@@ -41,7 +41,7 @@ import UniformTypeIdentifiers
     func subscribeMessageDelegate(command: CDVInvokedUrlCommand) {
         messageDelegateCommandCallback = command
         let result = CDVPluginResult(status: CDVCommandStatus_NO_RESULT)
-        result?.keepCallback = true
+        result.keepCallback = true
         self.commandDelegate.send(result, callbackId: command.callbackId)
     }
     
@@ -49,7 +49,7 @@ import UniformTypeIdentifiers
     func subscribeStateDelegate(command: CDVInvokedUrlCommand) {
         stateDelegateCommandCallback = command
         let result = CDVPluginResult(status: CDVCommandStatus_NO_RESULT)
-        result?.keepCallback = true
+        result.keepCallback = true
         self.commandDelegate.send(result, callbackId: command.callbackId)
     }
     
