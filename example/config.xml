@@ -22,7 +22,8 @@
     <preference name="SplashShowOnlyFirstTime" value="false" />
     <preference name="SplashScreen" value="screen" />
     <preference name="SplashScreenDelay" value="3000" />
-    <preference name="StatusBarOverlaysWebView" value="false" />
+    <preference name="StatusBarOverlaysWebView" value="true" />
+    <preference name="AndroidEdgeToEdge" value="true" />
     <platform name="android">
         <preference name="android-compileSdkVersion" value="36" />
         <preference name="android-targetSdkVersion" value="36" />
