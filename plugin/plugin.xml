@@ -58,13 +58,6 @@
             android:name="com.catapush.library.APP_KEY"
             android:value="$CATAPUSH_APP_KEY" />
       </config-file>
-      <config-file target="res/values/strings.xml" parent="/*">
-        <string name="catapush_notification_channel_id" translatable="false">$NOTIFICATION_CHANNEL_ID</string>
-        <string name="catapush_notification_channel_name" translatable="false">$NOTIFICATION_CHANNEL_NAME</string>
-        <string name="catapush_notification_title" translatable="false">$NOTIFICATION_TITLE</string>
-        <string name="catapush_notification_icon_res" translatable="false">$NOTIFICATION_ICON_RES</string>
-        <string name="catapush_notification_color_hex" translatable="false">$NOTIFICATION_COLOR_HEX</string>
-      </config-file>
       <source-file src="src/android/CatapushSdk.kt" target-dir="kotlin/com/catapush/cordova/sdk" />
       <source-file src="src/android/CatapushApplication.kt" target-dir="kotlin/com/catapush/cordova/sdk" />
       <source-file src="src/android/CatapushCordovaEventDelegate.kt" target-dir="kotlin/com/catapush/cordova/sdk" />
@@ -80,5 +73,7 @@
       <hook type="after_platform_add" src="./scripts/android/editManifest.js" />
       <hook type="after_plugin_install" src="./scripts/android/editManifest.js" />
       <hook type="before_build" src="./scripts/android/editManifest.js" />
+      <hook type="after_plugin_install" src="./scripts/android/writeStringResources.js" />
+      <hook type="before_build" src="./scripts/android/writeStringResources.js" />
   </platform>
 </plugin>
