@@ -182,14 +182,21 @@ class CatapushSdk : CordovaPlugin(), IMessagesDispatchDelegate, IStatusDispatchD
     CatapushCordovaEventDelegate.setContext(cordova.context)
 
     inited = (Catapush.getInstance() as Catapush).waitInitialization()
-    (Catapush.getInstance() as Catapush).setAppKey(appId)
     if (inited) {
+      // Override the manifest app key with the one provided by the JS layer.
+      // The SDK persists this override so start() and subsequent launches use it.
+      try {
+        (Catapush.getInstance() as Catapush).setAppKey(appId)
+      } catch (e: Exception) {
+        callbackContext.error("setAppKey failed [${e.javaClass.simpleName}]: ${e.message ?: "(null message)"}")
+        return
+      }
       tryDispatchQueuedEvents()
       val pluginResult = PluginResult(PluginResult.Status.OK, true)
       pluginResult.keepCallback = true
       callbackContext.sendPluginResult(pluginResult)
     } else {
-      callbackContext.error("Please invoke Catapush.getInstance().init(...) in the Application.onCreate(...) callback of your Android native app")
+      callbackContext.error("Catapush not initialized: make sure Catapush.getInstance().init() is called in Application.onCreate() of your Android native app")
     }
   }
 
