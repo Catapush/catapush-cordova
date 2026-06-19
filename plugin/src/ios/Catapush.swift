@@ -594,7 +594,8 @@ import UniformTypeIdentifiers
             self.channel = channel
         }
         
-        func libraryDidReceive(_ messageIP: MessageIP) {
+        func libraryDidReceive(_ messageIP: MessageIP?) {
+            guard let messageIP = messageIP else { return }
             let result = [
                 "eventName": "Catapush#catapushMessageReceived",
                 "message": CatapushSdk.formatMessageID(message: messageIP)
