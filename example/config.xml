@@ -61,6 +61,7 @@
     </platform>
     <platform name="ios">
         <preference name="deployment-target" value="14.0" />
+        <hook type="before_build" src="scripts/patchPackageSwift.js" />
         <allow-intent href="itms:*" />
         <allow-intent href="itms-apps:*" />
         <icon height="57" src="resources/ios/icon/icon.png" width="57" />
